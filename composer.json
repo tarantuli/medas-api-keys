@@ -1,6 +1,6 @@
 {
-    "name": "morphp/medas-placeholder",
-    "description": "Medas placeholder",
+    "name": "morphp/medas-api-keys",
+    "description": "Medas API keys",
     "authors": [
         {
             "name": "Patrick Morpey",
@@ -11,7 +11,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "morphp/medas-core": "dev-dev"
+        "morphp/medas-core": "dev-dev",
+        "morphp/medas-storage-manager": "dev-dev"
     },
     "require-dev": {
         "morphp/medas-service-manager": "dev-dev",
@@ -19,8 +20,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Medas\\Placeholder\\": "src/",
-            "Medas\\PlaceholderTest\\": "tests/"
+            "Medas\\ApiKeys\\": "src/",
+            "Medas\\ApiKeysTest\\": "tests/"
         }
     }
 }
