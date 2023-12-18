@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\ApiKeys;
 
+use Medas\Console\ConsolePackage;
 use Medas\Core\AsSingleton;
 use Medas\ServiceManager\BasePackage;
 
@@ -13,7 +14,9 @@ class ApiKeysPackage extends BasePackage
 
     public function dependencies(): array
     {
-        return [];
+        return [
+            ConsolePackage::instance(),
+        ];
     }
 
     public function sourceDirectory(): string
