@@ -20,7 +20,7 @@ readonly class KeyStoreManager
         private StoreManager   $storeManager,
 
         #[ConfigValue(ConfigOptions\StorageName::class)]
-        private string         $storageName,
+        private string|null    $storageName,
 
         #[ConfigValue(ConfigOptions\StoreName::class)]
         private string         $storeName,
