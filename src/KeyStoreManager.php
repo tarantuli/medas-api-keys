@@ -72,4 +72,11 @@ readonly class KeyStoreManager
 
         $this->storeManager->upsert($this->get(), ['keyHash' => $keyHash], ['name' => $name]);
     }
+
+    public function getKeyHash(string $name): string|null
+    {
+        $records = $this->storeManager->fetch($this->get(), ['name' => $name]);
+
+        return $records->hasRecords() ? $records->fetchRecord()['keyHash'] : null;
+    }
 }

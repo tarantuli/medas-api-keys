@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\ApiKeys\ConsoleCommands;
 
-use Medas\ApiKeys\{KeyCreator, KeyStoreManager};
+use Medas\ApiKeys\{Exceptions\InvalidKeyName, KeyCreator, KeyStoreManager};
 use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Formats\Color, Text};
 use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\Core\Attributes\Service;
@@ -39,6 +39,11 @@ readonly class CreateKey extends BaseConsoleCommand
     public function process(array $arguments): void
     {
         $name = $arguments[1];
+
+        if (!preg_match('/^\S+$/', $name)) {
+            throw new InvalidKeyName($name);
+        }
+
         $key = $this->keyCreator->create();
 
         $this->keyStoreManager->storeKey($name, $key);
