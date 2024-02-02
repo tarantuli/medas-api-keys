@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\ApiKeys;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Core\Attributes\{ConfigValue, Entrypoint, Service};
 
 #[Service]
 readonly class KeyCreator
@@ -16,6 +16,7 @@ readonly class KeyCreator
     {
     }
 
+    #[Entrypoint]
     public function create(int $length = null): string
     {
         return bin2hex(random_bytes(($length ?? $this->defaultKeyLength) / 2));

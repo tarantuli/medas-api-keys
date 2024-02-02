@@ -7,9 +7,9 @@ namespace Medas\ApiKeys\ConsoleCommands;
 use Medas\ApiKeys\{Exceptions\InvalidKeyName, KeyCreator, KeyStoreManager};
 use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Formats\Color, Text};
 use Medas\ConsolePrinter\ConsolePrinter;
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{Entrypoint, Service};
 
-#[Service]
+#[Service, Entrypoint]
 readonly class CreateKey extends BaseConsoleCommand
 {
     public function __construct(
