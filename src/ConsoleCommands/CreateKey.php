@@ -13,10 +13,10 @@ use Medas\Core\Attributes\{Entrypoint, Service};
 readonly class CreateKey extends BaseConsoleCommand
 {
     public function __construct(
-        private ConsolePrinter  $printer,
-        private KeyCreator      $keyCreator,
-        private KeyStoreManager $keyStoreManager,
-        private RootGroup       $group,
+        private ConsolePrinter             $printer,
+        private KeyCreator                 $keyCreator,
+        private KeyStoreManager            $keyStoreManager,
+        private ApiKeysConsoleCommandGroup $group,
     )
     {
     }
