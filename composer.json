@@ -1,6 +1,7 @@
 {
     "name": "morphp/medas-api-keys",
-    "description": "Medas API keys",
+    "description": "Contains services to create API keys",
+    "keywords": ["backend"],
     "authors": [
         {
             "name": "Patrick Morpey",
