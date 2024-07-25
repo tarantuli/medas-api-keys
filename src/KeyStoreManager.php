@@ -16,7 +16,6 @@ readonly class KeyStoreManager
     private Store $store;
 
     public function __construct(
-        private KeyCreator     $keyCreator,
         private StorageManager $storageManager,
         private StoreManager   $storeManager,
 
@@ -65,15 +64,6 @@ readonly class KeyStoreManager
             ->build($store->storage(), $blueprint);
 
         $storageController->actionExecutor()->executeSet($actions);
-    }
-
-    public function createNamedKey(string $name): string
-    {
-        $key = $this->keyCreator->create();
-
-        $this->storeKey($name, $key);
-
-        return "$name:$key";
     }
 
     public function storeKey(string $name, string $key): void
