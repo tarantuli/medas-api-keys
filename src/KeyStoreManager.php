@@ -7,7 +7,7 @@ namespace Medas\ApiKeys;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\StoreManager;
+use Medas\StorageManager\StoreController;
 use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
 
 #[Service]
@@ -16,16 +16,23 @@ readonly class KeyStoreManager
     private Store $store;
 
     public function __construct(
-        private StorageManager $storageManager,
-        private StoreManager   $storeManager,
+        private StorageManager  $storageManager,
+        private StoreController $storeController,
 
         #[ConfigValue(ConfigOptions\StorageName::class)]
-        private string|null    $storageName,
+        private string|null     $storageName,
 
         #[ConfigValue(ConfigOptions\StoreName::class)]
-        private string         $storeName,
+        private string          $storeName,
     )
     {
+    }
+
+    public function storeKey(string $name, string $key): void
+    {
+        $keyHash = password_hash($key, PASSWORD_DEFAULT);
+
+        $this->storeController->upsert($this->get(), ['keyHash' => $keyHash], ['name' => $name]);
     }
 
     public function get(): Store
@@ -66,16 +73,9 @@ readonly class KeyStoreManager
         $storageController->actionExecutor()->executeSet($actions);
     }
 
-    public function storeKey(string $name, string $key): void
-    {
-        $keyHash = password_hash($key, PASSWORD_DEFAULT);
-
-        $this->storeManager->upsert($this->get(), ['keyHash' => $keyHash], ['name' => $name]);
-    }
-
     public function getKeyHash(string $name): string|null
     {
-        $records = $this->storeManager->fetch($this->get(), ['name' => $name]);
+        $records = $this->storeController->fetch($this->get(), ['name' => $name]);
 
         return $records->hasRecords() ? $records->fetchRecord()['keyHash'] : null;
     }
