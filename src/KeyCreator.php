@@ -6,6 +6,9 @@ namespace Medas\ApiKeys;
 
 use Medas\Core\Attributes\{ConfigValue, Entrypoint, Service};
 
+/**
+ * This class creates random keys consisting of lowercase hexadecimal characters.
+ */
 #[Service]
 readonly class KeyCreator
 {
@@ -19,6 +22,8 @@ readonly class KeyCreator
     #[Entrypoint]
     public function create(int $length = null): string
     {
-        return bin2hex(random_bytes(($length ?? $this->defaultKeyLength) / 2));
+        $length ??= $this->defaultKeyLength;
+
+        return substr(bin2hex(random_bytes($length)), 0, $length);
     }
 }

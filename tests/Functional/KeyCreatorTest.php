@@ -22,4 +22,13 @@ class KeyCreatorTest extends TestCase
         self::assertEquals($defaultLength, strlen($key1));
         self::assertNotEquals($key2, $key1);
     }
+
+    public function testOddLength(): void
+    {
+        $keyCreator = service(KeyCreator::class);
+
+        $key = $keyCreator->create(17);
+
+        self::assertEquals(17, strlen($key));
+    }
 }

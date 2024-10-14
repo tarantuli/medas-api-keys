@@ -27,7 +27,7 @@ readonly class DefaultKeyLength implements ConfigOption
 
     public function description(): string
     {
-        return 'The default length of generated keys, should be a multiple of 2';
+        return 'The default length of generated keys';
     }
 
     public function hasDefault(): bool
