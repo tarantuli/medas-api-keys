@@ -58,7 +58,7 @@ readonly class KeyStoreManager
         $blueprint->name = $store->name();
         $nameField = new Field('name', Type::Text);
         $keyHashField = new Field('keyHash', Type::Text);
-        $validTillField = new Field('validTill', Type::DateTime);
+        $validTillField = new Field('validTill', Type::DateTime, isNullable: true);
 
         $blueprint->addField($nameField);
         $blueprint->addField($keyHashField);
