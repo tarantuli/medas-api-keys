@@ -17,14 +17,16 @@ readonly class Validator
 
     public function validate(string $name, string $key): bool
     {
-        $hash = $this->keyStoreManager->getKeyHash($name);
+        $hashes = $this->keyStoreManager->getKeyHashes($name);
 
-        if (password_verify($key, $hash)) {
-            if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
-                $this->keyStoreManager->storeKey($name, $key);
+        foreach ($hashes as $hash) {
+            if (password_verify($key, $hash)) {
+                if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
+                    $this->keyStoreManager->storeKey($name, $key);
+                }
+
+                return true;
             }
-
-            return true;
         }
 
         return false;

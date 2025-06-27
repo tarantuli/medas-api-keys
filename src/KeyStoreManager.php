@@ -24,6 +24,9 @@ readonly class KeyStoreManager
 
         #[ConfigValue(ConfigOptions\StoreName::class)]
         private string          $storeName,
+
+        #[ConfigValue(ConfigOptions\AllowMultipleKeys::class)]
+        private bool            $allowMultipleKeys,
     )
     {
     }
@@ -32,7 +35,16 @@ readonly class KeyStoreManager
     {
         $keyHash = password_hash($key, PASSWORD_DEFAULT);
 
-        $this->storeController->upsert($this->get(), ['keyHash' => $keyHash], ['name' => $name]);
+        if ($this->allowMultipleKeys) {
+            $this->storeController->insert($this->get(), ['keyHash' => $keyHash, 'name' => $name]);
+        }
+        else {
+            $this->storeController->upsert(
+                $this->get(),
+                ['keyHash' => $keyHash],
+                ['name' => $name]
+            );
+        }
     }
 
     public function get(): Store
@@ -63,7 +75,7 @@ readonly class KeyStoreManager
         $blueprint->addField($nameField);
         $blueprint->addField($keyHashField);
         $blueprint->addField($validTillField);
-        $blueprint->addIndex(new Index([$nameField], isPrimary: true));
+        $blueprint->addIndex(new Index([$nameField]));
         $blueprint->addIndex(new Index([$keyHashField]));
 
         $storageController = $this->storageManager->controller();
@@ -73,10 +85,15 @@ readonly class KeyStoreManager
         $storageController->actionExecutor()->executeSet($actions);
     }
 
-    public function getKeyHash(string $name): string|null
+    public function getKeyHashes(string $name): array
     {
         $records = $this->storeController->fetch($this->get(), ['name' => $name]);
+        $hashes = [];
 
-        return $records->hasRecords() ? $records->fetchRecord()['keyHash'] : null;
+        foreach ($records->fetchRecords() as $record) {
+            $hashes[] = $record['keyHash'];
+        }
+
+        return $hashes;
     }
 }
