@@ -17,6 +17,11 @@ readonly class Validator
 
     public function validate(string $name, string $key): bool
     {
+        return cache([__CLASS__, $name, $key], fn() => $this->verify($name, $key));
+    }
+
+    private function verify(string $name, string $key): bool
+    {
         $hashes = $this->keyStoreManager->getKeyHashes($name);
 
         foreach ($hashes as $hash) {
