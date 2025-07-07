@@ -13,6 +13,7 @@
     "prefer-stable": true,
     "require": {
         "morphp/medas-console": "dev-dev",
+        "morphp/medas-console-printer": "dev-dev",
         "morphp/medas-core": "dev-dev",
         "morphp/medas-storage-manager": "dev-dev"
     },
