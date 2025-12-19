@@ -19,14 +19,14 @@ readonly class KeyStoreManager
         private StorageManager  $storageManager,
         private StoreController $storeController,
 
+        #[ConfigValue(ConfigOptions\AllowMultipleKeys::class)]
+        private bool            $allowMultipleKeys,
+
         #[ConfigValue(ConfigOptions\StorageName::class)]
         private string|null     $storageName,
 
         #[ConfigValue(ConfigOptions\StoreName::class)]
         private string          $storeName,
-
-        #[ConfigValue(ConfigOptions\AllowMultipleKeys::class)]
-        private bool            $allowMultipleKeys,
     )
     {
     }

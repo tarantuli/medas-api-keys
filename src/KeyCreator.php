@@ -20,7 +20,7 @@ readonly class KeyCreator
     }
 
     #[Entrypoint]
-    public function create(int $length = null): string
+    public function create(int|null $length = null): string
     {
         $length ??= $this->defaultKeyLength;
 
