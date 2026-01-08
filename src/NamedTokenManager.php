@@ -46,3 +46,4 @@ readonly class NamedTokenManager implements BearerTokenValidator
         return $name;
     }
 }
+
