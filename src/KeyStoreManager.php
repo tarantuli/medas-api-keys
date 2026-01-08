@@ -47,6 +47,13 @@ readonly class KeyStoreManager
         }
     }
 
+    public function deleteKey(string $key): void
+    {
+        $keyHash = password_hash($key, PASSWORD_DEFAULT);
+
+        $this->storeController->delete($this->get(), ['keyHash' => $keyHash]);
+    }
+
     public function get(): Store
     {
         if (!isset($this->store)) {

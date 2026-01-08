@@ -26,6 +26,11 @@ readonly class NamedTokenManager implements BearerTokenValidator
         return "$name:$key";
     }
 
+    public function delete(string $key): void
+    {
+        $this->keyStoreManager->deleteKey($key);
+    }
+
     public function userId(string $token): string|null
     {
         if (substr_count($token, ':') !== 1) {
