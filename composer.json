@@ -1,7 +1,7 @@
 {
   "name": "morphp/medas-api-keys",
   "description": "Contains services to create API keys",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "backend"
   ],
@@ -12,6 +12,11 @@
     }
   ],
   "type": "library",
+  "config": {
+    "platform": {
+      "php": "^8.4"
+    }
+  },
   "require": {
     "morphp/medas-console": "^2",
     "morphp/medas-console-printer": "^2",
