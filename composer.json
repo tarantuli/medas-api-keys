@@ -1,7 +1,7 @@
 {
   "name": "morphp/medas-api-keys",
   "description": "Contains services to create API keys",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "keywords": [
     "backend"
   ],
@@ -12,17 +12,22 @@
     }
   ],
   "type": "library",
+  "config": {
+    "platform": {
+      "php": "^8.2"
+    }
+  },
   "require": {
-    "morphp/medas-console": "^2",
-    "morphp/medas-console-printer": "^2",
-    "morphp/medas-core": "^2",
-    "morphp/medas-storage-manager": "^2"
+    "morphp/medas-console": "^1",
+    "morphp/medas-console-printer": "^1",
+    "morphp/medas-core": "^1",
+    "morphp/medas-storage-manager": "^1"
   },
   "require-dev": {
-    "morphp/medas-config-manager": "^2",
-    "morphp/medas-config-options": "^2",
-    "morphp/medas-json-storage": "^2",
-    "morphp/medas-service-manager": "^2",
+    "morphp/medas-config-manager": "^1",
+    "morphp/medas-config-options": "^1",
+    "morphp/medas-json-storage": "^1",
+    "morphp/medas-service-manager": "^1",
     "phpunit/phpunit": "^9.5"
   },
   "autoload": {
