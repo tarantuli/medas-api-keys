@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\ApiKeys;
 
-use Medas\Core\{Attributes\Service, Events\DebugInformation, Interfaces\BearerTokenValidator};
+use Medas\Core\{
+    Attributes\ConfigValue,
+    Attributes\Service,
+    Events\DebugInformation,
+    Interfaces\BearerTokenValidator
+};
 
 #[Service]
 readonly class NamedTokenManager implements BearerTokenValidator
@@ -13,6 +18,9 @@ readonly class NamedTokenManager implements BearerTokenValidator
         private KeyCreator      $keyCreator,
         private KeyStoreManager $keyStoreManager,
         private Validator       $validator,
+
+        #[ConfigValue(ConfigOptions\ValidateNamedTokens::class)]
+        private bool            $validateNamedTokens,
     )
     {
     }
@@ -52,7 +60,7 @@ readonly class NamedTokenManager implements BearerTokenValidator
 
         [$name, $key] = explode(':', $token);
 
-        if (!$this->validator->validate($name, $key)) {
+        if ($this->validateNamedTokens && !$this->validator->validate($name, $key)) {
             dispatch(new DebugInformation('[named-token-manager] key "%s" is invalid for name "%s"', $key, $name));
 
             return null;
