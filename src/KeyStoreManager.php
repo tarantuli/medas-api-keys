@@ -31,11 +31,17 @@ readonly class KeyStoreManager
     {
     }
 
-    public function storeKey(string $name, string $key): void
+    public function storeKey(string $name, string $key, string|null $replaceHash = null): void
     {
         $keyHash = password_hash($key, PASSWORD_DEFAULT);
 
         if ($this->allowMultipleKeys) {
+            // When replacing a hash (e.g. during rehash), delete the old record
+            // first so stale hashes do not accumulate in the store.
+            if ($replaceHash !== null) {
+                $this->deleteHash($replaceHash);
+            }
+
             $this->storeController->insert($this->get(), ['keyHash' => $keyHash, 'name' => $name]);
         }
         else {
@@ -83,7 +89,9 @@ readonly class KeyStoreManager
         $blueprint->addIndex(new Index([$nameField]));
         $blueprint->addIndex(new Index([$keyHashField]));
 
-        $storageController = $this->storageManager->controller();
+        // Use the same named storage controller that owns this store, so the
+        // schema is created in the correct storage rather than the default one.
+        $storageController = $this->storageManager->controller($this->storageName);
         $actions = $storageController->actionBuilders()->createStore()
             ->build($store->storage(), $blueprint);
 

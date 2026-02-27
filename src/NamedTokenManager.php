@@ -60,10 +60,21 @@ readonly class NamedTokenManager implements BearerTokenValidator
 
         [$name, $key] = explode(':', $token);
 
-        if ($this->validateNamedTokens && !$this->validator->validate($name, $key)) {
-            dispatch(new DebugInformation('[named-token-manager] key "%s" is invalid for name "%s"', $key, $name));
+        if ($this->validateNamedTokens) {
+            if (!$this->validator->validate($name, $key)) {
+                dispatch(new DebugInformation('[named-token-manager] key "%s" is invalid for name "%s"', $key, $name));
 
-            return null;
+                return null;
+            }
+        }
+        else {
+            // SECURITY: token validation is disabled via config; any token with
+            // a valid format is accepted without a store lookup. Only disable
+            // this in controlled environments (e.g. local development).
+            dispatch(new DebugInformation(
+                '[named-token-manager] token validation is disabled; accepting token for name "%s" without verification',
+                $name
+            ));
         }
 
         return $name;

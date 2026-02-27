@@ -38,6 +38,12 @@ readonly class CreateKey extends BaseConsoleCommand
 
     public function process(array $arguments): void
     {
+        if (!isset($arguments[1]) || $arguments[1] === '') {
+            $this->printer->print(Text::create('Usage: api-keys:create-key <name>', Color::White))->printEol();
+
+            return;
+        }
+
         $name = $arguments[1];
 
         if (!preg_match('/^\S+$/', $name)) {
