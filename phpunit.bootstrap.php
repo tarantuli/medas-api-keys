@@ -9,13 +9,15 @@ use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\JsonStorage\JsonStoragePackage;
 use Medas\JsonStorage\StorageDirectory;
+use Medas\ObjectInstantiator\ObjectInstantiator;
+use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
 use Medas\StorageManager\StorageManager;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
 chdir(__DIR__);
 
 new ServiceManager(function (): ServiceConfig {
-    $config = new ServiceConfig();
+    $config = new ServiceConfig(ObjectInstantiator::class);
 
     $config->addPackages([
         ApiKeysPackage::instance(),
@@ -23,6 +25,7 @@ new ServiceManager(function (): ServiceConfig {
         ConfigOptionsPackage::instance(),
         ConsolePrinterPackage::instance(),
         JsonStoragePackage::instance(),
+        ObjectInstantiatorPackage::instance(),
     ]);
 
     return $config;

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\ApiKeys;
 
 use Medas\Console\ConsolePackage;
-use Medas\Core\AsSingleton;
-use Medas\ServiceManager\BasePackage;
+use Medas\Core\{AsSingleton, BasePackage};
 
 class ApiKeysPackage extends BasePackage
 {

@@ -1,7 +1,6 @@
 {
   "name": "morphp/medas-api-keys",
   "description": "Contains services to create API keys",
-  "version": "2.0.4",
   "keywords": [
     "backend"
   ],
@@ -12,27 +11,28 @@
     }
   ],
   "type": "library",
-  "config": {
-    "platform": {
-      "php": "^8.4"
-    }
-  },
   "require": {
-    "morphp/medas-console": "^2",
-    "morphp/medas-console-printer": "^2",
-    "morphp/medas-core": "^2",
-    "morphp/medas-storage-manager": "^2"
+    "morphp/medas-console": "^3",
+    "morphp/medas-console-printer": "^3",
+    "morphp/medas-core": "^3",
+    "morphp/medas-storage-manager": "^3",
+    "php": "^8.4"
   },
   "require-dev": {
-    "morphp/medas-config-manager": "^2",
-    "morphp/medas-config-options": "^2",
-    "morphp/medas-json-storage": "^2",
-    "morphp/medas-service-manager": "^2",
-    "phpunit/phpunit": "^9.5"
+    "morphp/medas-config-manager": "^3",
+    "morphp/medas-config-options": "^3",
+    "morphp/medas-json-storage": "^3",
+    "morphp/medas-object-instantiator": "^3",
+    "morphp/medas-service-manager": "^3",
+    "phpunit/phpunit": "^10"
   },
   "autoload": {
     "psr-4": {
-      "Medas\\ApiKeys\\": "src/",
+      "Medas\\ApiKeys\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Medas\\ApiKeysTest\\": "tests/"
     }
   }
