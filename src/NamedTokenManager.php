@@ -70,7 +70,7 @@ readonly class NamedTokenManager implements BearerTokenValidator
         else {
             // SECURITY: token validation is disabled via config; any token with
             // a valid format is accepted without a store lookup. Only disable
-            // this in controlled environments (e.g. local development).
+            // this in controlled environments (e.g., local development).
             dispatch(new DebugInformation(
                 '[named-token-manager] token validation is disabled; accepting token for name "%s" without verification',
                 $name

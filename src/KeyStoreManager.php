@@ -36,7 +36,7 @@ readonly class KeyStoreManager
         $keyHash = password_hash($key, PASSWORD_DEFAULT);
 
         if ($this->allowMultipleKeys) {
-            // When replacing a hash (e.g. during rehash), delete the old record
+            // When replacing a hash (e.g., during rehash), delete the old record
             // first so stale hashes do not accumulate in the store.
             if ($replaceHash !== null) {
                 $this->deleteHash($replaceHash);
