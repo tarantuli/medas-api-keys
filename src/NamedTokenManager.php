@@ -8,6 +8,7 @@ use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
     Events\DebugInformation,
+    Interfaces\AuthenticationData,
     Interfaces\AuthenticationTokenController
 };
 use Medas\Json\JsonEncoder;
@@ -27,10 +28,10 @@ readonly class NamedTokenManager implements AuthenticationTokenController
     {
     }
 
-    public function create(mixed $data): string
+    public function create(AuthenticationData $data): string
     {
         $key = $this->keyCreator->create();
-        $name = $this->jsonEncoder->decode($data);
+        $name = $this->jsonEncoder->encode($data);
 
         $this->keyStoreManager->storeKey($name, $key);
 
@@ -53,7 +54,7 @@ readonly class NamedTokenManager implements AuthenticationTokenController
         }
     }
 
-    public function data(string $token): string|null
+    public function data(string $token): AuthenticationData|null
     {
         if (substr_count($token, ':') !== 1) {
             dispatch(new DebugInformation('[named-token-manager] token does not contain exactly one colon'));
@@ -85,7 +86,6 @@ readonly class NamedTokenManager implements AuthenticationTokenController
 
     public function userId(string $token): string|null
     {
-        // The whole data result is the user ID by definition
-        return $this->data($token);
+        return $this->data($token)?->getUserId();
     }
 }
