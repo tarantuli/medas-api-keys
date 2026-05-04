@@ -31,7 +31,7 @@ readonly class NamedTokenManager implements AuthenticationTokenController
     public function create(AuthenticationData $data): string
     {
         $key = $this->keyCreator->create();
-        $name = $this->jsonEncoder->encode($data);
+        $name = $this->jsonEncoder->encode($data->getUserId());
 
         $this->keyStoreManager->storeKey($name, $key);
 
