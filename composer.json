@@ -15,6 +15,8 @@
     "morphp/medas-console": "^3",
     "morphp/medas-console-printer": "^3",
     "morphp/medas-core": "^3",
+    "morphp/medas-json": "^3",
+    "morphp/medas-object-to-array-serializer": "^3",
     "morphp/medas-storage-manager": "^3",
     "php": "^8.4"
   },
