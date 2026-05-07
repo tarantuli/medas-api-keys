@@ -12,18 +12,20 @@ use Medas\Core\{
     Interfaces\AuthenticationTokenController
 };
 use Medas\Json\JsonEncoder;
+use Medas\ObjectToArraySerializer\ObjectToArraySerializer;
 
 #[Service]
 readonly class NamedTokenManager implements AuthenticationTokenController
 {
     public function __construct(
-        private JsonEncoder     $jsonEncoder,
-        private KeyCreator      $keyCreator,
-        private KeyStoreManager $keyStoreManager,
-        private Validator       $validator,
+        private JsonEncoder             $jsonEncoder,
+        private KeyCreator              $keyCreator,
+        private KeyStoreManager         $keyStoreManager,
+        private ObjectToArraySerializer $objectToArraySerializer,
+        private Validator               $validator,
 
         #[ConfigValue(ConfigOptions\ValidateNamedTokens::class)]
-        private bool            $validateNamedTokens,
+        private bool                    $validateNamedTokens,
     )
     {
     }
@@ -31,11 +33,11 @@ readonly class NamedTokenManager implements AuthenticationTokenController
     public function create(AuthenticationData $data): string
     {
         $key = $this->keyCreator->create();
-        $name = $this->jsonEncoder->encode($data->getUserId());
+        $dataString = $this->jsonEncoder->encode($this->objectToArraySerializer->serialize($data));
 
-        $this->keyStoreManager->storeKey($name, $key);
+        $this->keyStoreManager->storeKey($dataString, $key);
 
-        return "$name:$key";
+        return base64_encode($dataString) . '_' . base64_encode($data::class) . ':' . $key;
     }
 
     public function invalidate(string $token): void
@@ -45,7 +47,13 @@ readonly class NamedTokenManager implements AuthenticationTokenController
         }
 
         [$name, $key] = explode(':', $token);
-        $hashes = $this->keyStoreManager->getKeyHashes($name);
+
+        [
+            $dataString,
+        ] = explode('_', $name);
+
+        $dataString = base64_decode($dataString);
+        $hashes = $this->keyStoreManager->getKeyHashes($dataString);
 
         foreach ($hashes as $hash) {
             if (password_verify($key, $hash)) {
@@ -63,10 +71,17 @@ readonly class NamedTokenManager implements AuthenticationTokenController
         }
 
         [$name, $key] = explode(':', $token);
+        [$dataString, $dataType] = explode('_', $name);
+        $dataString = base64_decode($dataString);
+        $dataType = base64_decode($dataType);
 
         if ($this->validateNamedTokens) {
-            if (!$this->validator->validate($name, $key)) {
-                dispatch(new DebugInformation('[named-token-manager] key "%s" is invalid for name "%s"', $key, $name));
+            if (!$this->validator->validate($dataString, $key)) {
+                dispatch(new DebugInformation(
+                    '[named-token-manager] key "%s" is invalid for name "%s"',
+                    $key,
+                    $dataString
+                ));
 
                 return null;
             }
@@ -81,10 +96,14 @@ readonly class NamedTokenManager implements AuthenticationTokenController
             ));
         }
 
-        return $this->jsonEncoder->decode($name);
+        /** @var AuthenticationData */
+        return $this->objectToArraySerializer->unserialize(
+            $this->jsonEncoder->decode($dataString),
+            class: $dataType
+        );
     }
 
-    public function userId(string $token): string|null
+    public function userId(string $token): mixed
     {
         return $this->data($token)?->getUserId();
     }

@@ -21,6 +21,7 @@
   "require-dev": {
     "morphp/medas-config-manager": "^3",
     "morphp/medas-config-options": "^3",
+    "morphp/medas-events": "^3",
     "morphp/medas-json-storage": "^3",
     "morphp/medas-object-instantiator": "^3",
     "morphp/medas-service-manager": "^3",

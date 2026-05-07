@@ -3,16 +3,14 @@
 declare(strict_types=1);
 
 use Medas\ApiKeys\ApiKeysPackage;
-use Medas\ConfigManager\ConfigManager;
-use Medas\ConfigManager\ConfigManagerPackage;
+use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\ConsolePrinter\ConsolePrinterPackage;
-use Medas\JsonStorage\JsonStoragePackage;
-use Medas\JsonStorage\StorageDirectory;
-use Medas\ObjectInstantiator\ObjectInstantiator;
-use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
-use Medas\StorageManager\StorageManager;
+use Medas\Events\EventsPackage;
+use Medas\JsonStorage\{JsonStoragePackage, StorageDirectory};
+use Medas\ObjectInstantiator\{ObjectInstantiator, ObjectInstantiatorPackage};
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
+use Medas\StorageManager\StorageManager;
 
 chdir(__DIR__);
 
@@ -24,6 +22,7 @@ new ServiceManager(function (): ServiceConfig {
         ConfigManagerPackage::instance(),
         ConfigOptionsPackage::instance(),
         ConsolePrinterPackage::instance(),
+        EventsPackage::instance(),
         JsonStoragePackage::instance(),
         ObjectInstantiatorPackage::instance(),
     ]);
@@ -32,7 +31,4 @@ new ServiceManager(function (): ServiceConfig {
 });
 
 service(ConfigManager::class)->addDirectory(__DIR__ . '/tests/MockUps/Settings');
-
-service(StorageManager::class)->add(
-    new StorageDirectory(__DIR__ . '/tests/Storage', 'test-storage')
-);
+service(StorageManager::class)->add(new StorageDirectory(__DIR__ . '/tests/Storage', 'test-storage'));
