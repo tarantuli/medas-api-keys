@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace Medas\ApiKeys;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\StoreController;
-use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
+use Medas\MigrationBuilder\BuilderResolver;
+use Medas\MigrationBuilder\Structure\{Blueprint, Blueprint\Field, Blueprint\Index};
+use Medas\StorageManager\{
+    Interfaces\Store,
+    StorageManager,
+    StoreController,
+    Type,
+    UnitOfWork\UnitOfWork,
+    UnitOfWork\UnitOfWorkExecutor
+};
 
 #[Service]
 readonly class KeyStoreManager
@@ -16,17 +22,19 @@ readonly class KeyStoreManager
     private Store $store;
 
     public function __construct(
-        private StorageManager  $storageManager,
-        private StoreController $storeController,
+        private BuilderResolver    $builderResolver,
+        private StorageManager     $storageManager,
+        private StoreController    $storeController,
+        private UnitOfWorkExecutor $unitOfWorkExecutor,
 
         #[ConfigValue(ConfigOptions\AllowMultipleKeys::class)]
-        private bool            $allowMultipleKeys,
+        private bool               $allowMultipleKeys,
 
         #[ConfigValue(ConfigOptions\StorageName::class)]
-        private string|null     $storageName,
+        private string|null        $storageName,
 
         #[ConfigValue(ConfigOptions\StoreName::class)]
-        private string          $storeName,
+        private string             $storeName,
     )
     {
     }
@@ -89,13 +97,15 @@ readonly class KeyStoreManager
         $blueprint->addIndex(new Index([$nameField]));
         $blueprint->addIndex(new Index([$keyHashField]));
 
-        // Use the same named storage controller that owns this store, so the
-        // schema is created in the correct storage rather than the default one.
-        $storageController = $this->storageManager->controller($this->storageName);
-        $actions = $storageController->actionBuilders()->createStore()
-            ->build($store->storage(), $blueprint);
+        $storage = $store->storage();
+        $actionSet = $this->builderResolver->for($storage)->buildActions($storage, $blueprint);
+        $unitOfWork = new UnitOfWork();
 
-        $storageController->actionExecutor()->executeSet($actions);
+        foreach ($actionSet as $action) {
+            $unitOfWork->addAction($action);
+        }
+
+        $this->unitOfWorkExecutor->execute($unitOfWork);
     }
 
     public function getKeyHashes(string $name): array

@@ -10,10 +10,10 @@ use Medas\Console\{
     Commands\CommandInput,
     Commands\ConsoleCommandGroup,
     Commands\Range,
-    Formats\Color,
+    Formats\SafeColor,
+    Printer,
     Text
 };
-use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\Core\Attributes\{Entrypoint, Service};
 
 #[Service, Entrypoint]
@@ -21,9 +21,9 @@ readonly class CreateKey extends BaseConsoleCommand
 {
     public function __construct(
         private ApiKeysConsoleCommandGroup $group,
-        private ConsolePrinter             $printer,
         private KeyCreator                 $keyCreator,
         private KeyStoreManager            $keyStoreManager,
+        private Printer                    $printer,
     )
     {
     }
@@ -61,8 +61,8 @@ readonly class CreateKey extends BaseConsoleCommand
         $this->keyStoreManager->storeKey($name, $key);
 
         $this->printer->print(
-            Text::create('API key: ', Color::White),
-            Text::create($key, Color::LightGray)
+            Text::create('API key: ', SafeColor::White),
+            Text::create($key, SafeColor::LightGray)
         )->printEol();
     }
 }
