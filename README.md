@@ -103,7 +103,7 @@ readonly class KeyLifecycleExample
 **Creating a key from the console:**
 
 ```bash
-php bin/console api-keys:create-key my-client-name
+php bin/medas api-keys:create-key my-client-name
 # API key: 3f8a2c...
 ```
 
