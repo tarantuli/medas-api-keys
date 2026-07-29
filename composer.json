@@ -12,8 +12,8 @@
   ],
   "type": "library",
   "require": {
-    "morphp/medas-console": "^3",
-    "morphp/medas-core": "^3",
+    "morphp/medas-console": "^4",
+    "morphp/medas-core": "^4",
     "morphp/medas-json": "^3",
     "morphp/medas-object-to-array-serializer": "^3",
     "morphp/medas-storage-manager": "^4",
@@ -23,11 +23,11 @@
   "require-dev": {
     "morphp/medas-config-manager": "^3",
     "morphp/medas-config-options": "^3",
-    "morphp/medas-console-printer": "^3",
+    "morphp/medas-console-printer": "^5",
     "morphp/medas-events": "^3",
     "morphp/medas-json-storage": "^4",
-    "morphp/medas-object-instantiator": "^3",
-    "morphp/medas-service-manager": "^3",
+    "morphp/medas-object-instantiator": "^4",
+    "morphp/medas-service-manager": "^4",
     "phpunit/phpunit": "^10"
   },
   "autoload": {

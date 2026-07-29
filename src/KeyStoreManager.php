@@ -98,7 +98,7 @@ readonly class KeyStoreManager
         $blueprint->addIndex(new Index([$keyHashField]));
 
         $storage = $store->storage();
-        $actionSet = $this->builderResolver->for($storage)->buildActions($storage, $blueprint);
+        $actionSet = $this->builderResolver->find($storage)->buildActions($storage, $blueprint);
         $unitOfWork = new UnitOfWork();
 
         foreach ($actionSet as $action) {

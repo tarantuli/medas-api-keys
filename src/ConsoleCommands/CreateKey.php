@@ -6,10 +6,10 @@ namespace Medas\ApiKeys\ConsoleCommands;
 
 use Medas\ApiKeys\{Exceptions\InvalidKeyName, KeyCreator, KeyStoreManager};
 use Medas\Console\{
+    Commands\Argument,
     Commands\BaseConsoleCommand,
     Commands\CommandInput,
     Commands\ConsoleCommandGroup,
-    Commands\Range,
     Formats\SafeColor,
     Printer,
     Text
@@ -43,14 +43,16 @@ readonly class CreateKey extends BaseConsoleCommand
         return 'Create a new API key';
     }
 
-    public function allowedArgumentCount(): Range
+    public function arguments(): array
     {
-        return new Range(1);
+        return [
+            Argument::required('name'),
+        ];
     }
 
     public function process(CommandInput $input): void
     {
-        $name = $input->getArgument(1);
+        $name = $input->getArgument('name');
 
         if (!preg_match('/^\S+$/', $name)) {
             throw new InvalidKeyName($name);
